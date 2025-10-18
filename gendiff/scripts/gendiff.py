@@ -1,5 +1,7 @@
 import argparse
 
+import json
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -15,6 +17,10 @@ def main():
         metavar='FORMAT'
     )
     args = parser.parse_args()
+
+    with open(args.first_file) as f1, open(args.second_file) as f2:
+        data1 = json.load(f1)
+        data2 = json.load(f2)
 
 
 if __name__ == '__main__':
