@@ -1,10 +1,6 @@
 import argparse
 
 
-def generate_diff(file_1, file_2,format_name='stylish'):
-    return f"Comparing {file_1} and {file_2} in {format_name} format"
-
-
 def main():
     parser = argparse.ArgumentParser(
         description='Compares two configuration files and shows difference.',
@@ -19,10 +15,6 @@ def main():
         metavar='FORMAT'
     )
     args = parser.parse_args()
-
-    diff = generate_diff(args.first_file, args.second_file, args.format)
-
-    print(diff)
 
 
 if __name__ == '__main__':
