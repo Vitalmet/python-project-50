@@ -1,0 +1,33 @@
+name: Lint and Test
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install uv
+          make install
+
+      - name: Run linter
+        run: |
+          make check
+      - name: Run test coverage
+        run: |
+          make test-coverage
+      - name: SonarQubeScan
+        uses: SonarSource/sonarqube-scan-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
