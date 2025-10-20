@@ -2,8 +2,7 @@ import os
 import json
 import tempfile
 import pytest
-from gendiff.gendiff import generate_diff
-
+from gendiff.scripts.gendiff import generate_diff, format_value, main
 
 class TestSpecificFiles:
     """Тесты для конкретных файлов из задания"""
