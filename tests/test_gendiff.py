@@ -2,57 +2,67 @@ import os
 import json
 import tempfile
 import pytest
-from gendiff.scripts.gendiff import generate_diff, format_value
 
-class TestSpecificFiles:
-    """Тесты для конкретных файлов из задания"""
+# Убираем неиспользуемый импорт format_value
+from gendiff.scripts.gendiff import generate_diff
+
+
+class TestGenerateDiff:
+    """Тесты для основной функции generate_diff"""
 
     @pytest.fixture
-    def create_specific_files(self):
-        """Фикстура для создания тестовых файлов из задания"""
+    def create_temp_files(self):
+        """Фикстура для создания временных файлов"""
         files = []
 
-        def _create_file1():
-            content = {
-                "host": "hexlet.io",
-                "timeout": 50,
-                "proxy": "123.234.53.22",
-                "follow": False
-            }
+        def _create_file(content):
             fd, path = tempfile.mkstemp(suffix='.json', dir=os.getcwd())
             with os.fdopen(fd, 'w') as f:
-                json.dump(content, f)
+                if isinstance(content, dict):
+                    json.dump(content, f)
+                else:
+                    f.write(content)
             files.append(path)
             return path
 
-        def _create_file2():
-            content = {
-                "timeout": 20,
-                "verbose": True,
-                "host": "hexlet.io"
-            }
-            fd, path = tempfile.mkstemp(suffix='.json', dir=os.getcwd())
-            with os.fdopen(fd, 'w') as f:
-                json.dump(content, f)
-            files.append(path)
-            return path
+        yield _create_file
 
-        yield _create_file1, _create_file2
-
-        # Очистка
+        # Очистка после тестов
         for file_path in files:
             if os.path.exists(file_path):
                 os.remove(file_path)
 
-    def test_specific_files_comparison(self, create_specific_files):
-        """Тест сравнения конкретных файлов из задания"""
-        create_file1, create_file2 = create_specific_files
-        file1 = create_file1()
-        file2 = create_file2()
+    def test_identical_files(self, create_temp_files):
+        """Тест одинаковых файлов"""
+        data = {"name": "John", "age": 30, "city": "New York"}
+        file1 = create_temp_files(data)
+        file2 = create_temp_files(data)
 
         result = generate_diff(file1, file2)
 
-        # Ожидаемый результат для этих конкретных файлов
+        expected = """{
+    age: 30
+    city: New York
+    name: John
+}"""
+        assert result == expected
+
+    def test_specific_files_comparison(self, create_temp_files):
+        """Тест сравнения конкретных файлов из задания"""
+        file1 = create_temp_files({
+            "host": "hexlet.io",
+            "timeout": 50,
+            "proxy": "123.234.53.22",
+            "follow": False
+        })
+        file2 = create_temp_files({
+            "timeout": 20,
+            "verbose": True,
+            "host": "hexlet.io"
+        })
+
+        result = generate_diff(file1, file2)
+
         expected = """{
   - follow: false
     host: hexlet.io
@@ -63,133 +73,91 @@ class TestSpecificFiles:
 }"""
         assert result == expected
 
-    def test_specific_files_structure(self, create_specific_files):
-        """Тест структуры вывода для конкретных файлов"""
-        create_file1, create_file2 = create_specific_files
-        file1 = create_file1()
-        file2 = create_file2()
+    def test_different_values(self, create_temp_files):
+        """Тест файлов с разными значениями"""
+        file1 = create_temp_files({"name": "John", "age": 30})
+        file2 = create_temp_files({"name": "Jane", "age": 25})
 
         result = generate_diff(file1, file2)
 
-        # Проверяем наличие конкретных строк в выводе
-        assert "  - follow: false" in result
-        assert "    host: hexlet.io" in result  # одинаковый ключ
-        assert "  - proxy: 123.234.53.22" in result  # удаленный ключ
-        assert "  - timeout: 50" in result
-        assert "  + timeout: 20" in result  # измененный ключ
-        assert "  + verbose: true" in result  # добавленный ключ
-
-    def test_specific_files_analysis(self, create_specific_files):
-        """Детальный анализ изменений в конкретных файлах"""
-        create_file1, create_file2 = create_specific_files
-        file1 = create_file1()
-        file2 = create_file2()
-
-        result = generate_diff(file1, file2)
-        lines = result.strip().split('\n')
-
-        # Анализируем какие изменения произошли
-        removed_keys = [line for line in lines if line.startswith('  -')]
-        added_keys = [line for line in lines if line.startswith('  +')]
-        unchanged_keys = [line for line in lines if line.startswith('    ')]
-
-        # Проверяем ожидаемые изменения
-        assert len(removed_keys) == 3  # follow, proxy, timeout (старое значение)
-        assert len(added_keys) == 2  # timeout (новое значение), verbose
-        assert len(unchanged_keys) == 1  # host
-
-        # Проверяем конкретные ключи
-        assert any('follow: false' in line for line in removed_keys)
-        assert any('proxy: 123.234.53.22' in line for line in removed_keys)
-        assert any('timeout: 50' in line for line in removed_keys)
-        assert any('timeout: 20' in line for line in added_keys)
-        assert any('verbose: true' in line for line in added_keys)
-        assert any('host: hexlet.io' in line for line in unchanged_keys)
-
-
-def test_specific_files_content():
-    """Тест который создает точно такие же файлы как в задании"""
-    with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f1:
-        json.dump({
-            "host": "hexlet.io",
-            "timeout": 50,
-            "proxy": "123.234.53.22",
-            "follow": False
-        }, f1)
-        file1_path = f1.name
-
-    with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f2:
-        json.dump({
-            "timeout": 20,
-            "verbose": True,
-            "host": "hexlet.io"
-        }, f2)
-        file2_path = f2.name
-
-    try:
-        result = generate_diff(file1_path, file2_path)
-
-        # Проверяем точное соответствие ожидаемому результату
         expected = """{
-  - follow: false
-    host: hexlet.io
-  - proxy: 123.234.53.22
-  - timeout: 50
-  + timeout: 20
-  + verbose: true
+  - age: 30
+  + age: 25
+  - name: John
+  + name: Jane
 }"""
-        assert result == expected, f"Expected:\n{expected}\n\nGot:\n{result}"
+        assert result == expected
 
-    finally:
-        # Очистка
-        os.unlink(file1_path)
-        os.unlink(file2_path)
+    def test_added_key(self, create_temp_files):
+        """Тест добавления нового ключа"""
+        file1 = create_temp_files({"name": "John"})
+        file2 = create_temp_files({"name": "John", "age": 30})
+
+        result = generate_diff(file1, file2)
+
+        expected = """{
+  + age: 30
+    name: John
+}"""
+        assert result == expected
+
+    def test_removed_key(self, create_temp_files):
+        """Тест удаления ключа"""
+        file1 = create_temp_files({"name": "John", "age": 30})
+        file2 = create_temp_files({"name": "John"})
+
+        result = generate_diff(file1, file2)
+
+        expected = """{
+  - age: 30
+    name: John
+}"""
+        assert result == expected
+
+    def test_boolean_values(self, create_temp_files):
+        """Тест с булевыми значениями"""
+        file1 = create_temp_files({"flag": True, "active": False})
+        file2 = create_temp_files({"flag": False, "active": True})
+
+        result = generate_diff(file1, file2)
+
+        # Проверяем что форматирование булевых значений работает
+        assert "false" in result
+        assert "true" in result
+
+    def test_none_values(self, create_temp_files):
+        """Тест с None значениями"""
+        file1 = create_temp_files({"value": None, "data": "test"})
+        file2 = create_temp_files({"value": "not null", "data": "test"})
+
+        result = generate_diff(file1, file2)
+
+        # Проверяем что форматирование None работает
+        assert "null" in result
 
 
-@pytest.mark.parametrize("file1_data,file2_data,expected_lines", [
-    (
-            # Ваши конкретные файлы
-            {
-                "host": "hexlet.io",
-                "timeout": 50,
-                "proxy": "123.234.53.22",
-                "follow": False
-            },
-            {
-                "timeout": 20,
-                "verbose": True,
-                "host": "hexlet.io"
-            },
-            [
-                "  - follow: false",
-                "    host: hexlet.io",
-                "  - proxy: 123.234.53.22",
-                "  - timeout: 50",
-                "  + timeout: 20",
-                "  + verbose: true"
-            ]
-    )
+# Быстрый тест для проверки импорта
+def test_import():
+    """Простой тест чтобы проверить что импорт работает"""
+    assert callable(generate_diff)
+
+
+@pytest.mark.parametrize("data1,data2,expected_contains", [
+    # Добавление ключа
+    ({"a": 1}, {"a": 1, "b": 2}, ["+ b: 2"]),
+    # Удаление ключа
+    ({"a": 1, "b": 2}, {"a": 1}, ["- b: 2"]),
+    # Изменение значения
+    ({"a": 1}, {"a": 2}, ["- a: 1", "+ a: 2"]),
+    # Без изменений
+    ({"a": 1}, {"a": 1}, ["a: 1"]),
 ])
-def test_parametrized_specific_files(file1_data, file2_data, expected_lines):
-    """Параметризованный тест для конкретных файлов"""
-    with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f1:
-        json.dump(file1_data, f1)
-        file1_path = f1.name
+def test_parametrized_scenarios(create_temp_files, data1, data2, expected_contains):
+    """Параметризованные тесты для различных сценариев сравнения"""
+    file1 = create_temp_files(data1)
+    file2 = create_temp_files(data2)
 
-    with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f2:
-        json.dump(file2_data, f2)
-        file2_path = f2.name
+    result = generate_diff(file1, file2)
 
-    try:
-        result = generate_diff(file1_path, file2_path)
-
-        # Проверяем что все ожидаемые строки присутствуют в результате
-        for expected_line in expected_lines:
-            assert expected_line in result, f"Expected line '{expected_line}' not found in result"
-
-        assert result.startswith("{\n")
-        assert result.endswith("\n}")
-
-    finally:
-        os.unlink(file1_path)
-        os.unlink(file2_path)
+    for expected_string in expected_contains:
+        assert expected_string in result
