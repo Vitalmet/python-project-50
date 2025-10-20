@@ -9,23 +9,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.12'
 
       - name: Install dependencies
         run: |
+          pip install --upgrade pip
           pip install uv
           make install
-          pip install ruff
+          pip install ruff pytest pytest-cov
 
       - name: Run linter
         run: |
           make lint
-      - name: SonarQubeScan
+      - name: Run tests with coverage
+        run: |
+          pytest --cov=hexlet-code --cov-report=xml tests/
+
+      - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v2
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.projectKey=YOUR_PROJECT_KEY
+            -Dsonar.organization=YOUR_ORGANIZATION
+            -Dsonar.python.coverage.reportPaths=coverage.xml
