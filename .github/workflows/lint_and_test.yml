@@ -39,9 +39,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.projectKey=Vitalmet_python-project-50
-            -Dsonar.organization=vitalmet
-            -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.sources=gendiff
-            -Dsonar.scm.disabled=true
+              -Dsonar.host.url=https://sonarcloud.io
+              -Dsonar.projectKey=vitalmet_python-project-50
+              -Dsonar.organization=vitalmet
+              -Dsonar.python.coverage.reportPaths=coverage.xml
+              -Dsonar.sources=gendiff
