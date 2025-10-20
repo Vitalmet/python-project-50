@@ -9,5 +9,3 @@ package-install:
 
 lint:
 	python3 -m ruff check
-
-
