@@ -43,4 +43,5 @@ jobs:
             -Dsonar.projectKey=Vitalmet_python-project-50
             -Dsonar.organization=vitalmet
             -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.analysis.automatic=false
+            -Dsonar.sources=gendiff
+            -Dsonar.scm.disabled=true
