@@ -8,5 +8,6 @@ package-install:
 	uv tool install dist/*.whl
 
 lint:
-	ruff check
+	python3 -m ruff check
+
 
