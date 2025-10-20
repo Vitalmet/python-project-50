@@ -40,7 +40,7 @@ jobs:
         with:
           args: >
               -Dsonar.host.url=https://sonarcloud.io
-              -Dsonar.projectKey=vitalmet_python-project-50
-              -Dsonar.organization=vitalmet
+              -Dsonar.projectKey=Vitalmet_python-project-50
+              -Dsonar.organization=Vitalmet_python-project-50
               -Dsonar.python.coverage.reportPaths=coverage.xml
               -Dsonar.sources=gendiff
