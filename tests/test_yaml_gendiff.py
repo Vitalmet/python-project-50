@@ -1,6 +1,5 @@
 import json
 import tempfile
-import pytest
 import yaml
 from gendiff.scripts.gendiff import generate_diff
 
@@ -17,6 +16,7 @@ def create_test_file(data, extension='.json'):
 
 
 class TestGendiff:
+    """Минимальные тесты для gendiff"""
 
     def test_json_comparison(self):
         """Сравнение JSON файлов - основной сценарий"""
