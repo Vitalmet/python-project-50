@@ -44,4 +44,3 @@ jobs:
               -Dsonar.organization=vitalmet
               -Dsonar.python.coverage.reportPaths=coverage.xml
               -Dsonar.sources=gendiff
-              -Dsonar.tests=tests
