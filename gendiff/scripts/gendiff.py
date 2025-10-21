@@ -53,6 +53,7 @@ def main():
     )
     args = parser.parse_args()
 
+
     diff_str = generate_diff(args.first_file, args.second_file)
     print(diff_str)
 
