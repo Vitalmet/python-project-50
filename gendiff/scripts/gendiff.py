@@ -1,6 +1,6 @@
 import argparse
 import os
-from .parser import load_file
+from .parsers import load_file
 
 
 def format_value(value):
