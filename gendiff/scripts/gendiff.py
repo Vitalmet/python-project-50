@@ -1,5 +1,6 @@
-import json
 import argparse
+import os
+from .parser import load_file
 
 
 def format_value(value):
@@ -14,11 +15,9 @@ def format_value(value):
 
 
 def generate_diff(file_path1, file_path2):
-    with open(file_path1) as f1:
-        data1 = json.load(f1)
-
-    with open(file_path2) as f2:
-        data2 = json.load(f2)
+    # Загружаем данные через парсер
+    data1 = load_file(file_path1)
+    data2 = load_file(file_path2)
 
     result = []
     all_keys = sorted(set(data1.keys()) | set(data2.keys()))
@@ -51,8 +50,27 @@ def main():
         help='set format of output',
         metavar='FORMAT'
     )
+    parser.add_argument(
+        '-v', '--version',
+        action='version',
+        version='%(prog)s 1.0'
+    )
+
     args = parser.parse_args()
 
+    # Если не указаны оба файла, показываем справку
+    if args.first_file is None or args.second_file is None:
+        parser.print_help()
+        return
+
+    # Проверяем существование файлов
+    if not os.path.exists(args.first_file):
+        print(f"Error: File '{args.first_file}' not found")
+        return 1
+
+    if not os.path.exists(args.second_file):
+        print(f"Error: File '{args.second_file}' not found")
+        return 1
 
     diff_str = generate_diff(args.first_file, args.second_file)
     print(diff_str)
