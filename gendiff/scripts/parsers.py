@@ -3,7 +3,6 @@ import yaml
 
 
 def get_format(file_path):
-    """Определяет формат файла по расширению"""
     if file_path.endswith('.json'):
         return 'json'
     elif file_path.endswith(('.yml', '.yaml')):
