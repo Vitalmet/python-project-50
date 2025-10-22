@@ -23,7 +23,7 @@ jobs:
           pip install --upgrade pip
           pip install uv
           make install
-          pip install ruff pytest pytest-cov
+          pip install PyYAML pytest pytest-cov ruff
 
       - name: Run linter
         run: |
