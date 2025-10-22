@@ -1,5 +1,6 @@
 import json
 import tempfile
+import pytest
 from gendiff.scripts.gendiff import generate_diff
 
 # Условный импорт для YAML
@@ -54,7 +55,7 @@ class TestGendiff:
     def test_yaml_comparison(self):
         """Сравнение YAML файлов - основной сценарий"""
         if not YAML_AVAILABLE:
-            return  # Пропускаем тест если YAML не доступен
+            pytest.skip("PyYAML not available")  # Пропускаем тест если YAML не доступен
 
         file1 = create_test_file({
             "host": "hexlet.io",
