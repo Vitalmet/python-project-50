@@ -1,40 +1,23 @@
 import argparse
 import os
 from .parsers import load_file
+from .diff_builder import build_diff
+from .formatters.stylish import render as render_stylish
 
 
-def format_value(value):
-    if value is True:
-        return 'true'
-    elif value is False:
-        return 'false'
-    elif value is None:
-        return 'null'
-    else:
-        return str(value)
-
-
-def generate_diff(file_path1, file_path2):
-    # Загружаем данные через парсер
+def generate_diff(file_path1, file_path2, format_name='stylish'):
+    """
+    Генерирует различия между двумя файлами
+    """
     data1 = load_file(file_path1)
     data2 = load_file(file_path2)
 
-    result = []
-    all_keys = sorted(set(data1.keys()) | set(data2.keys()))
+    diff = build_diff(data1, data2)
 
-    for key in all_keys:
-        if key not in data1:
-            result.append(f"  + {key}: {format_value(data2[key])}")
-        elif key not in data2:
-            result.append(f"  - {key}: {format_value(data1[key])}")
-        else:
-            if data1[key] != data2[key]:
-                result.append(f"  - {key}: {format_value(data1[key])}")
-                result.append(f"  + {key}: {format_value(data2[key])}")
-            else:
-                result.append(f"    {key}: {format_value(data1[key])}")
-
-    return "{\n" + "\n".join(result) + "\n}"
+    if format_name == 'stylish':
+        return render_stylish(diff)
+    else:
+        raise ValueError(f"Unsupported format: {format_name}")
 
 
 def main():
@@ -47,7 +30,7 @@ def main():
     parser.add_argument(
         '-f', '--format',
         default='stylish',
-        help='set format of output',
+        help='set format of output (default: stylish)',
         metavar='FORMAT'
     )
     parser.add_argument(
@@ -58,12 +41,10 @@ def main():
 
     args = parser.parse_args()
 
-    # Если не указаны оба файла, показываем справку
     if args.first_file is None or args.second_file is None:
         parser.print_help()
         return
 
-    # Проверяем существование файлов
     if not os.path.exists(args.first_file):
         print(f"Error: File '{args.first_file}' not found")
         return 1
@@ -72,7 +53,7 @@ def main():
         print(f"Error: File '{args.second_file}' not found")
         return 1
 
-    diff_str = generate_diff(args.first_file, args.second_file)
+    diff_str = generate_diff(args.first_file, args.second_file, args.format)
     print(diff_str)
 
 
