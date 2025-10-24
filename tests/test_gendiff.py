@@ -19,7 +19,7 @@ def test_identical_files():
 
     result = generate_diff(file1, file2)
 
-    # Реальный вывод для одинаковых файлов
+    # Для одинаковых файлов должны быть только строки без +/-
     expected = """{
     age: 30
     name: John
@@ -43,7 +43,7 @@ def test_different_files():
 
     result = generate_diff(file1, file2)
 
-    # Реальный вывод для разных файлов
+    # Правильный вывод с отступами
     expected = """{
   - follow: false
     host: hexlet.io
@@ -62,8 +62,8 @@ def test_added_key():
 
     result = generate_diff(file1, file2)
 
-    assert "+ age: 30" in result
-    assert "name: John" in result
+    assert "  + age: 30" in result
+    assert "    name: John" in result
 
 
 def test_removed_key():
@@ -73,8 +73,8 @@ def test_removed_key():
 
     result = generate_diff(file1, file2)
 
-    assert "- age: 30" in result
-    assert "name: John" in result
+    assert "  - age: 30" in result
+    assert "    name: John" in result
 
 
 def test_changed_value():
@@ -84,5 +84,5 @@ def test_changed_value():
 
     result = generate_diff(file1, file2)
 
-    assert "- age: 30" in result
-    assert "+ age: 25" in result
+    assert "  - age: 30" in result
+    assert "  + age: 25" in result
