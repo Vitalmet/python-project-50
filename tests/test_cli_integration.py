@@ -1,7 +1,5 @@
-import pytest
 import os
 import subprocess
-import tempfile
 
 
 def test_cli_command():
@@ -9,12 +7,11 @@ def test_cli_command():
     file1 = os.path.join('tests', 'fixtures', 'file1.json')
     file2 = os.path.join('tests', 'fixtures', 'file2.json')
 
-    # Запускаем как subprocess
     result = subprocess.run(
         ['python', '-m', 'gendiff.scripts.gendiff', file1, file2],
         capture_output=True,
         text=True,
-        cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # корень проекта
+        cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     )
 
     assert result.returncode == 0
