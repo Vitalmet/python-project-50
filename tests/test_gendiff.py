@@ -19,7 +19,11 @@ def test_identical_files():
 
     result = generate_diff(file1, file2)
 
-    expected = "{\n    age: 30\n    name: John\n}"
+    # Реальный вывод для одинаковых файлов
+    expected = """{
+    age: 30
+    name: John
+}"""
     assert result == expected
 
 
@@ -39,6 +43,7 @@ def test_different_files():
 
     result = generate_diff(file1, file2)
 
+    # Реальный вывод для разных файлов
     expected = """{
   - follow: false
     host: hexlet.io

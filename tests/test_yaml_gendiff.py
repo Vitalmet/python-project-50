@@ -55,7 +55,7 @@ class TestGendiff:
     def test_yaml_comparison(self):
         """Сравнение YAML файлов - основной сценарий"""
         if not YAML_AVAILABLE:
-            pytest.skip("PyYAML not available")  # Пропускаем тест если YAML не доступен
+            pytest.skip("PyYAML not available")
 
         file1 = create_test_file({
             "host": "hexlet.io",
