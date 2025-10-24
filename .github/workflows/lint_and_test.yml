@@ -44,7 +44,4 @@ jobs:
               -Dsonar.organization=vitalmet
               -Dsonar.python.coverage.reportPaths=coverage.xml
               -Dsonar.sources=gendiff
-              -Dsonar.newCode.referenceBranch=main
-              -Dsonar.branch.name=${{ github.ref_name }}
-              -Dsonar.coverage.exclusions=tests/**,**/__pycache__/**
-              -Dsonar.verbose=true
+              -Dsonar.branch.name=main
