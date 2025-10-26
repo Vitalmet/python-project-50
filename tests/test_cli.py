@@ -6,20 +6,20 @@ from gendiff.__main__ import main
 
 def test_main_with_valid_files(capsys):
     """Тест main с валидными файлами"""
-    file1 = os.path.join('tests', 'fixtures', 'file1.json')
-    file2 = os.path.join('tests', 'fixtures', 'file2.json')
+    file1 = os.path.join("tests", "fixtures", "file1.json")
+    file2 = os.path.join("tests", "fixtures", "file2.json")
 
     original_argv = sys.argv
 
     try:
-        sys.argv = ['gendiff', file1, file2]
+        sys.argv = ["gendiff", file1, file2]
         main()
 
         captured = capsys.readouterr()
         output = captured.out
 
-        assert 'common' in output
-        assert 'follow' in output
+        assert "common" in output
+        assert "follow" in output
         assert len(output) > 0
 
     finally:
@@ -28,19 +28,19 @@ def test_main_with_valid_files(capsys):
 
 def test_main_with_format_option(capsys):
     """Тест main с опцией формата"""
-    file1 = os.path.join('tests', 'fixtures', 'file1.json')
-    file2 = os.path.join('tests', 'fixtures', 'file2.json')
+    file1 = os.path.join("tests", "fixtures", "file1.json")
+    file2 = os.path.join("tests", "fixtures", "file2.json")
 
     original_argv = sys.argv
 
     try:
-        sys.argv = ['gendiff', file1, file2, '--format', 'stylish']
+        sys.argv = ["gendiff", file1, file2, "--format", "stylish"]
         main()
 
         captured = capsys.readouterr()
         output = captured.out
 
-        assert 'common' in output
+        assert "common" in output
         assert len(output) > 0
 
     finally:
@@ -52,7 +52,7 @@ def test_main_with_help_option(capsys):
     original_argv = sys.argv
 
     try:
-        sys.argv = ['gendiff', '--help']
+        sys.argv = ["gendiff", "--help"]
 
         with pytest.raises(SystemExit):
             main()
@@ -60,8 +60,8 @@ def test_main_with_help_option(capsys):
         captured = capsys.readouterr()
         output = captured.out
 
-        assert 'Compares two configuration files' in output
-        assert '--format' in output
+        assert "Compares two configuration files" in output
+        assert "--format" in output
 
     finally:
         sys.argv = original_argv
@@ -72,7 +72,7 @@ def test_main_with_version_option(capsys):
     original_argv = sys.argv
 
     try:
-        sys.argv = ['gendiff', '--version']
+        sys.argv = ["gendiff", "--version"]
 
         with pytest.raises(SystemExit):
             main()
@@ -80,7 +80,7 @@ def test_main_with_version_option(capsys):
         captured = capsys.readouterr()
         output = captured.out
 
-        assert 'gendiff 1.0' in output
+        assert "gendiff 1.0" in output
 
     finally:
         sys.argv = original_argv
@@ -91,13 +91,13 @@ def test_main_with_nonexistent_file(capsys):
     original_argv = sys.argv
 
     try:
-        sys.argv = ['gendiff', 'nonexistent1.json', 'nonexistent2.json']
+        sys.argv = ["gendiff", "nonexistent1.json", "nonexistent2.json"]
 
         main()
     except SystemExit as e:
         # Ловим SystemExit и проверяем stderr
         captured = capsys.readouterr()
-        assert 'not found' in captured.err
+        assert "not found" in captured.err
         assert e.code == 1
     else:
         assert False, "Expected SystemExit"
@@ -110,7 +110,7 @@ def test_main_with_missing_arguments(capsys):
     original_argv = sys.argv
 
     try:
-        sys.argv = ['gendiff']
+        sys.argv = ["gendiff"]
 
         with pytest.raises(SystemExit) as exc_info:
             main()
@@ -120,8 +120,8 @@ def test_main_with_missing_arguments(capsys):
         captured = capsys.readouterr()
         error_output = captured.err
 
-        assert 'error:' in error_output
-        assert 'required' in error_output
+        assert "error:" in error_output
+        assert "required" in error_output
 
     finally:
         sys.argv = original_argv

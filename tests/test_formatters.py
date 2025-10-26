@@ -6,8 +6,8 @@ from gendiff.formatters.stylish import render
 
 def test_render_stylish():
     """Тест рендеринга stylish формата"""
-    file1 = os.path.join('tests', 'fixtures', 'file1.json')
-    file2 = os.path.join('tests', 'fixtures', 'file2.json')
+    file1 = os.path.join("tests", "fixtures", "file1.json")
+    file2 = os.path.join("tests", "fixtures", "file2.json")
 
     # Загружаем данные из файлов
     data1 = load_file(file1)
@@ -18,29 +18,26 @@ def test_render_stylish():
     result = render(diff)
 
     assert isinstance(result, str)
-    assert 'common' in result
-    assert 'follow' in result
+    assert "common" in result
+    assert "follow" in result
 
 
 def test_render_stylish_empty():
     """Тест рендеринга пустого diff"""
     result = render({})
-    assert result == '{\n}'
+    assert result == "{\n}"
 
 
 def test_render_stylish_nested():
     """Тест рендеринга вложенных структур"""
     diff = {
-        'key': {
-            'type': 'nested',
-            'children': {
-                'nested_key': {
-                    'type': 'unchanged',
-                    'value': 'nested_value'
-                }
-            }
+        "key": {
+            "type": "nested",
+            "children": {
+                "nested_key": {"type": "unchanged", "value": "nested_value"}
+            },
         }
     }
     result = render(diff)
-    assert 'key' in result
-    assert 'nested_key' in result
+    assert "key" in result
+    assert "nested_key" in result

@@ -17,17 +17,17 @@ def test_stringify():
 def test_render_plain_simple():
     """Тест простого plain формата"""
     diff = {
-        'key1': {'type': 'added', 'value': 'value1'},
-        'key2': {'type': 'removed', 'value': 'value2'},
-        'key3': {'type': 'changed', 'old_value': 'old', 'new_value': 'new'},
-        'key4': {'type': 'unchanged', 'value': 'same'}  # должен игнорироваться
+        "key1": {"type": "added", "value": "value1"},
+        "key2": {"type": "removed", "value": "value2"},
+        "key3": {"type": "changed", "old_value": "old", "new_value": "new"},
+        "key4": {"type": "unchanged", "value": "same"},  # должен игнорироваться
     }
 
     result = render_plain(diff)
     expected_lines = [
         "Property 'key1' was added with value: 'value1'",
         "Property 'key2' was removed",
-        "Property 'key3' was updated. From 'old' to 'new'"
+        "Property 'key3' was updated. From 'old' to 'new'",
     ]
 
     for line in expected_lines:
@@ -40,18 +40,12 @@ def test_render_plain_simple():
 def test_render_plain_nested():
     """Тест plain формата с вложенными структурами"""
     diff = {
-        'common': {
-            'type': 'nested',
-            'children': {
-                'follow': {
-                    'type': 'added',
-                    'value': False
-                },
-                'setting1': {
-                    'type': 'unchanged',
-                    'value': 'Value 1'
-                }
-            }
+        "common": {
+            "type": "nested",
+            "children": {
+                "follow": {"type": "added", "value": False},
+                "setting1": {"type": "unchanged", "value": "Value 1"},
+            },
         }
     }
 
@@ -63,12 +57,7 @@ def test_render_plain_nested():
 
 def test_render_plain_complex_values():
     """Тест plain формата со сложными значениями"""
-    diff = {
-        'setting': {
-            'type': 'added',
-            'value': {'nested': 'value'}
-        }
-    }
+    diff = {"setting": {"type": "added", "value": {"nested": "value"}}}
 
     result = render_plain(diff)
     assert "Property 'setting' was added with value: [complex value]" in result
@@ -76,26 +65,26 @@ def test_render_plain_complex_values():
 
 def test_generate_diff_with_plain_format():
     """Интеграционный тест generate_diff с plain форматом"""
-    file1 = os.path.join('tests', 'fixtures', 'file1.json')
-    file2 = os.path.join('tests', 'fixtures', 'file2.json')
+    file1 = os.path.join("tests", "fixtures", "file1.json")
+    file2 = os.path.join("tests", "fixtures", "file2.json")
 
-    result = generate_diff(file1, file2, 'plain')
+    result = generate_diff(file1, file2, "plain")
 
     assert isinstance(result, str)
     # Проверяем специфичные для plain формата паттерны
-    assert any(word in result for word in ['added', 'removed', 'updated'])
+    assert any(word in result for word in ["added", "removed", "updated"])
 
 
 def test_render_plain_empty():
     """Тест plain формата с пустым diff"""
     result = render_plain({})
-    assert result == ''
+    assert result == ""
 
 
 def test_cli_with_plain_format():
     """Тест CLI с plain форматом"""
-    file1 = os.path.join('tests', 'fixtures', 'file1.json')
-    file2 = os.path.join('tests', 'fixtures', 'file2.json')
+    file1 = os.path.join("tests", "fixtures", "file1.json")
+    file2 = os.path.join("tests", "fixtures", "file2.json")
 
-    result = generate_diff(file1, file2, 'plain')
+    result = generate_diff(file1, file2, "plain")
     assert isinstance(result, str)

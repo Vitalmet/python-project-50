@@ -7,8 +7,8 @@ class TestNestedStructures:
 
     def test_nested_json_comparison(self):
         """Сравнение JSON файлов с вложенностью"""
-        file1 = os.path.join('tests', 'fixtures', 'file1.json')
-        file2 = os.path.join('tests', 'fixtures', 'file2.json')
+        file1 = os.path.join("tests", "fixtures", "file1.json")
+        file2 = os.path.join("tests", "fixtures", "file2.json")
 
         result = generate_diff(file1, file2)
 
@@ -24,8 +24,8 @@ class TestNestedStructures:
 
     def test_nested_yaml_comparison(self):
         """Сравнение YAML файлов с вложенностью"""
-        file1 = os.path.join('tests', 'fixtures', 'file1.yml')
-        file2 = os.path.join('tests', 'fixtures', 'file2.yml')
+        file1 = os.path.join("tests", "fixtures", "file1.yml")
+        file2 = os.path.join("tests", "fixtures", "file2.yml")
 
         result = generate_diff(file1, file2)
 
@@ -39,8 +39,8 @@ class TestNestedStructures:
 
     def test_nested_mixed_formats(self):
         """Сравнение JSON и YAML файлов с вложенностью"""
-        json_file = os.path.join('tests', 'fixtures', 'file1.json')
-        yaml_file = os.path.join('tests', 'fixtures', 'file2.yml')
+        json_file = os.path.join("tests", "fixtures", "file1.json")
+        yaml_file = os.path.join("tests", "fixtures", "file2.yml")
 
         result = generate_diff(json_file, yaml_file)
 
@@ -53,16 +53,16 @@ class TestNestedStructures:
 
 def test_expected_output_structure():
     """Тест точного соответствия ожидаемому выводу"""
-    file1 = os.path.join('tests', 'fixtures', 'file1.json')
-    file2 = os.path.join('tests', 'fixtures', 'file2.json')
+    file1 = os.path.join("tests", "fixtures", "file1.json")
+    file2 = os.path.join("tests", "fixtures", "file2.json")
 
     result = generate_diff(file1, file2)
 
     # Проверяем структуру вывода
-    lines = result.split('\n')
+    lines = result.split("\n")
 
     # Проверяем наличие изменений
-    assert any('+' in line for line in lines)
-    assert any('-' in line for line in lines)
-    assert any('common:' in line for line in lines)
-    assert any('group1:' in line for line in lines)
+    assert any("+" in line for line in lines)
+    assert any("-" in line for line in lines)
+    assert any("common:" in line for line in lines)
+    assert any("group1:" in line for line in lines)
