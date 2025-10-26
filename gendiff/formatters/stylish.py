@@ -23,7 +23,7 @@ def format_dict(dictionary, depth):
         formatted_value = stringify(value, depth)
         lines.append(f"{indent}{key}: {formatted_value}")
 
-    result = ['{'] + lines + [f"{indent}}}"]
+    result = ['{'] + lines + [f"{'    ' * (depth - 1)}" + '}']
     return '\n'.join(result)
 
 
@@ -56,7 +56,11 @@ def format_diff(diff, depth=0):
             value_formatted = stringify(node['value'], depth + 1)
             lines.append(f"{indent}    {key}: {value_formatted}")
 
-    result = ['{'] + lines + [f"{indent}}}"]
+    if depth == 0:
+        result = ['{'] + lines + ['}']
+    else:
+        result = ['{'] + lines + [f"{indent}" + '}']
+
     return '\n'.join(result)
 
 
