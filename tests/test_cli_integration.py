@@ -70,4 +70,5 @@ def test_cli_command_nonexistent_file():
         cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     )
 
-    assert 'not found' in result.stdout
+    assert 'not found' in result.stderr
+    assert result.returncode == 1

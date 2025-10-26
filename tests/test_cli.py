@@ -94,14 +94,13 @@ def test_main_with_nonexistent_file(capsys):
         sys.argv = ['gendiff', 'nonexistent1.json', 'nonexistent2.json']
 
         result = main()
-
-        assert result == 1
-
+    except SystemExit as e:
+        # Ловим SystemExit и проверяем stderr
         captured = capsys.readouterr()
-        output = captured.out
-
-        assert "not found" in output
-
+        assert 'not found' in captured.err
+        assert e.code == 1
+    else:
+        assert False, "Expected SystemExit"
     finally:
         sys.argv = original_argv
 
