@@ -12,7 +12,10 @@ def render_json(diff):
         if node_type == 'nested':
             return {
                 'type': 'nested',
-                'children': {key: process_node(child) for key, child in node['children'].items()}
+                'children': {
+                    key: process_node(child)
+                    for key, child in node['children'].items()
+                }
             }
         elif node_type == 'changed':
             return {

@@ -15,9 +15,6 @@ def stringify(value):
 
 
 def build_plain_lines(diff, path=''):
-    """
-    Рекурсивно строит строки для plain формата
-    """
     lines = []
 
     for key in sorted(diff.keys()):
@@ -30,14 +27,18 @@ def build_plain_lines(diff, path=''):
             lines.extend(nested_lines)
         elif node_type == 'added':
             value = stringify(node['value'])
-            lines.append(f"Property '{current_path}' was added with value: {value}")
+            message = f"Property '{current_path}' was added with value: {value}"
+            lines.append(message)
         elif node_type == 'removed':
             lines.append(f"Property '{current_path}' was removed")
         elif node_type == 'changed':
             old_value = stringify(node['old_value'])
             new_value = stringify(node['new_value'])
-            lines.append(f"Property '{current_path}' was updated. From {old_value} to {new_value}")
-        # unchanged nodes не включаем в plain вывод
+            message = (
+                f"Property '{current_path}' was updated. "
+                f"From {old_value} to {new_value}"
+            )
+            lines.append(message)
 
     return lines
 
