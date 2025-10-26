@@ -2,8 +2,8 @@ import pytest
 import os
 import tempfile
 import yaml
-from gendiff.scripts.gendiff import generate_diff
-from gendiff.scripts.parsers import load_file
+from gendiff.gendiff import generate_diff
+from gendiff.parsers import load_file
 
 def test_generate_diff_nonexistent_file():
     """Тест с несуществующим файлом"""

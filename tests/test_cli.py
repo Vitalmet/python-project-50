@@ -1,7 +1,7 @@
 import pytest
 import os
 import sys
-from gendiff.scripts.gendiff import main
+from gendiff.__main__ import main
 
 
 def test_main_with_valid_files(capsys):

@@ -1,7 +1,7 @@
 import json
 import tempfile
 import pytest
-from gendiff.scripts.gendiff import generate_diff
+from gendiff.gendiff import generate_diff
 
 # Условный импорт для YAML
 try:

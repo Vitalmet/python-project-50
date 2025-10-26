@@ -23,8 +23,9 @@ dev = [
     "pytest-cov>=4.0",
 ]
 
+# ИСПРАВЛЯЕМ ЭТУ СТРОКУ:
 [project.scripts]
-gendiff = "gendiff.scripts.gendiff:main"
+gendiff = "gendiff.__main__:main"
 
 [tool.ruff]
 line-length = 80

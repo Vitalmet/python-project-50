@@ -1,7 +1,7 @@
 import os
-from gendiff.scripts.diff_builder import build_diff
-from gendiff.scripts.formatters.stylish import render
-from gendiff.scripts.parsers import load_file
+from gendiff.diff_builder import build_diff
+from gendiff.parsers import load_file
+from gendiff.formatters.stylish import render
 
 
 def test_render_stylish():

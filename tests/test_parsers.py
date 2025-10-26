@@ -1,7 +1,7 @@
 import pytest
 import tempfile
 import os
-from gendiff.scripts.parsers import load_file, parse, get_format
+from gendiff.parsers import load_file, parse, get_format
 
 
 def test_get_format():

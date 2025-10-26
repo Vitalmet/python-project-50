@@ -1,6 +1,6 @@
 import pytest
 import os
-from gendiff.scripts.gendiff import generate_diff
+from gendiff.gendiff import generate_diff
 
 
 def test_generate_diff_complete_workflow():

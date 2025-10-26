@@ -1,6 +1,6 @@
 import os
-from gendiff.scripts.formatters.plain import render_plain, stringify
-from gendiff.scripts.gendiff import generate_diff
+from gendiff.formatters.plain import render_plain, stringify
+from gendiff.gendiff import generate_diff
 
 
 def test_stringify():

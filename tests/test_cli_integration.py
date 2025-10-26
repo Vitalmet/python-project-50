@@ -8,7 +8,7 @@ def test_cli_command():
     file2 = os.path.join('tests', 'fixtures', 'file2.json')
 
     result = subprocess.run(
-        ['python', '-m', 'gendiff.scripts.gendiff', file1, file2],
+        ['python', '-m', 'gendiff', file1, file2],
         capture_output=True,
         text=True,
         cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +25,7 @@ def test_cli_command_with_format():
     file2 = os.path.join('tests', 'fixtures', 'file2.json')
 
     result = subprocess.run(
-        ['python', '-m', 'gendiff.scripts.gendiff', file1, file2, '--format', 'stylish'],
+        ['python', '-m', 'gendiff', file1, file2, '--format', 'stylish'],
         capture_output=True,
         text=True,
         cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,7 +38,7 @@ def test_cli_command_with_format():
 def test_cli_command_help():
     """Интеграционный тест CLI помощи"""
     result = subprocess.run(
-        ['python', '-m', 'gendiff.scripts.gendiff', '--help'],
+        ['python', '-m', 'gendiff', '--help'],
         capture_output=True,
         text=True,
         cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -51,7 +51,7 @@ def test_cli_command_help():
 def test_cli_command_version():
     """Интеграционный тест CLI версии"""
     result = subprocess.run(
-        ['python', '-m', 'gendiff.scripts.gendiff', '--version'],
+        ['python', '-m', 'gendiff', '--version'],
         capture_output=True,
         text=True,
         cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -64,7 +64,7 @@ def test_cli_command_version():
 def test_cli_command_nonexistent_file():
     """Интеграционный тест CLI с несуществующим файлом"""
     result = subprocess.run(
-        ['python', '-m', 'gendiff.scripts.gendiff', 'nonexistent1.json', 'nonexistent2.json'],
+        ['python', '-m', 'gendiff', 'nonexistent1.json', 'nonexistent2.json'],
         capture_output=True,
         text=True,
         cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
