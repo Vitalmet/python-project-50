@@ -5,3 +5,4 @@ https://asciinema.org/a/FhyyPIlsqKHJl7qQECDFKsDs8
 https://asciinema.org/a/A5zUJi4v03RwWLCmU1UU9m9cc
 https://asciinema.org/a/OUsFrz8by9hJbsMmGk2Gs7K3s
 https://asciinema.org/a/VpJYljrKN3bf4HwN5oVElqz4Z
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Vitalmet_python-project-50&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Vitalmet_python-project-50)
