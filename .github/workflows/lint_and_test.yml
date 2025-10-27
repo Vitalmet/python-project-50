@@ -30,7 +30,7 @@ jobs:
           make lint
       - name: Run tests with coverage
         run: |
-          pytest --cov=hexlet-code --cov-report=xml tests/
+          pytest --cov=gendiff --cov-report=xml tests/
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v2
@@ -44,4 +44,6 @@ jobs:
               -Dsonar.organization=vitalmet
               -Dsonar.python.coverage.reportPaths=coverage.xml
               -Dsonar.sources=gendiff
+              -Dsonar.tests=tests
+              -Dsonar.coverage.exclusions=**/__init__.py,**/__main__.py
               -Dsonar.branch.name=main
