@@ -1,0 +1,7 @@
+.venv
+dist
+*.cast
+.coverage
+*.json
+*.yml
+coverage.xml
